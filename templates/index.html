@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Object-Detection</title>
+  <title>Our App</title>
 {% endblock %}
 
-
 {% block body %}
-    <h1>Live Object Detection Stream</h1>
-    <img src="{{ url_for('video_feed') }}" alt="Video Stream" style="width: 100%; max-width: 800px;">
+  <div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+    <h1 class="mb-4">HOME</h1>
+    <div>
+      <a href="{{ url_for('cctv') }}" class="btn btn-primary btn-lg mx-2">Object Detection</a>
+      <a href="{{ url_for('pdf') }}" class="btn btn-primary btn-lg mx-2">OCR Reader</a>
+    </div>
+  </div>
 {% endblock %}

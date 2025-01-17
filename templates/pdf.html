@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>OCR Reader for PDF & Docx</title>
+{% endblock %}
+
+{% block body %}
+  <div class="container text-center">
+    <h1 class="mb-4">OCR Reader</h1>
+    <p>Drag and drop the document you want to extract plain text from</p>
+
+    <div class="d-flex flex-column align-items-center">
+      <!-- Drop Zone -->
+      <div id="dropZone" class="drop-zone">
+        <form id="uploadForm" action="/pdf" method="post" enctype="multipart/form-data">
+          <input id="fileInput" type="file" name="file" style="display: none;" />
+          <button type="button" id="triggerFileInput">Choose File</button>
+          <span id="fileName" style="margin-left: 10px;">No file chosen</span>
+          <br /><br />
+          <input type="submit" value="Extract" id="submitBtn" disabled />
+        </form>
+      </div>
+
+      <script>
+        let dropZone = document.getElementById('dropZone');
+        let fileInput = document.getElementById('fileInput');
+        let uploadForm = document.getElementById('uploadForm');
+        let submitBtn = document.getElementById('submitBtn');
+        let triggerFileInput = document.getElementById('triggerFileInput');
+        let fileNameDisplay = document.getElementById('fileName');
+        
+        // Open file dialog when "Choose File" button is clicked
+        triggerFileInput.addEventListener('click', function () {
+          fileInput.click();
+        });
+        
+        // Update UI when a file is selected
+        fileInput.addEventListener('change', function () {
+          if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name; // Show file name
+            submitBtn.removeAttribute('disabled'); // Enable submit button
+          } else {
+            fileNameDisplay.textContent = 'No file chosen'; // Reset if no file is chosen
+            submitBtn.setAttribute('disabled', 'true');
+          }
+        });
+        
+        // Drag-and-drop functionality
+        dropZone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          this.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', function () {
+          this.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', function (e) {
+          e.preventDefault();
+          this.classList.remove('dragover');
+        
+          let file = e.dataTransfer.files[0];
+          if (file) {
+            fileInput.files = e.dataTransfer.files;
+            fileNameDisplay.textContent = file.name; // Show dropped file name
+            submitBtn.removeAttribute('disabled'); // Enable submit button
+          }
+        });
+      </script>
+
+      <!-- Extracted Text Section -->
+      {% if text_data %}
+        <h2 class="my-3">Extracted Text:</h2>
+        <textarea rows="10" readonly>{{ text_data }}</textarea>
+      {% endif %}
+
+      <!-- Back Button -->
+      <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg mx my-4">Back</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>Object-Detection</title>
+{% endblock %}
+
+{% block body %}
+  <div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+    <h1 class="mb-4">Live Object Detection Stream</h1>
+    <div class="d-flex flex-column">
+      <img src="{{ url_for('video_feed') }}" alt="Video Stream" style="width: 100%; max-width: 800px;" />
+      <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg mx my-2">Back</a>
+    </div>
+  </div>
+{% endblock %}
